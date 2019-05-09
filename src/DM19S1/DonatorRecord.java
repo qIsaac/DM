@@ -2,6 +2,7 @@ package DM19S1;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DonatorRecord {
     private List<Donator>  donatorList;
@@ -27,5 +28,20 @@ public class DonatorRecord {
             e.printStackTrace();
         }
         return Util.getDonatorSet(result);
+    }
+    public List<Donation> readFromInputFile(Set<Donator> donators){
+        List<Donation> donations =  donators.stream().filter(obj -> obj.getRecipients() != null && obj.getRecipients().size() > 0 ).map(b -> getDonation(b)).collect(Collectors.toList());
+        return donations;
+    }
+    private Donation getDonation(Donator donator){
+        Donation donation = new Donation();
+        donation.setName(donator.getName());
+        donation.setBirthday(donator.getBirthday());
+        Double total = 0d;
+        for (Recipient r:donator.getRecipients()) {
+            total += Double.parseDouble(r.getDonation());
+        }
+        donation.setAmount(total);
+        return donation;
     }
 }

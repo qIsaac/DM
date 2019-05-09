@@ -2,6 +2,7 @@ package DM19S1;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DM {
     public static void main(String[] args) {
@@ -17,19 +18,28 @@ public class DM {
         DonatorRecord dr = new DonatorRecord();
         Instruction is = new InstrunctionProcessor();
         Set<Donator> record = dr.readFormInputFile(recordfile);
+
         List<String> reportList = new ArrayList<>();
         try {
             List<String> instrunctions = FileUtils.readLines(new File(instructionfile),"utf-8");
+            List<String> queryinstrunctions = instrunctions.stream().filter(o -> o.startsWith("query")).collect(Collectors.toList());
             instrunctions.forEach( obj ->{
                 is.process(obj,record,reportList);
             });
+            List<Donation>  donations = dr.readFromInputFile(record);
+            donations.sort(Comparator.comparingDouble(Donation::getAmount).reversed().thenComparing(Donation::getName));
+            queryinstrunctions.forEach( obj ->{
+                is.process(obj,record,donations,reportList);
+            });
+
+
             StringBuilder builder = new StringBuilder();
             for (Donator rec : record) {
                 builder.append(rec.toString());
             }
             StringBuilder builder1 = new StringBuilder();
             for (String rep : reportList) {
-                builder1.append(rep.toString());
+                builder1.append(rep.toString()+"\n");
             }
             FileUtils.write(new File(resultfile),builder.toString(),false);
             FileUtils.write(new File(reportfile),builder1.toString(),false);

@@ -3,6 +3,7 @@ package DM19S1;
 import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InstrunctionProcessor implements Instruction {
 
@@ -96,16 +97,51 @@ public class InstrunctionProcessor implements Instruction {
         return 1;
     }
 
-    public int query(String name) {
+    @Override
+    public int query(String name, Set<Donator> recorade, List<String> lists) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----").append("query name ").append(name).append("------\n");
+        Set<Donator> querySet = recorade.stream().filter(o -> name.equals(o.getName())).collect(Collectors.toSet());
+        sb.append( querySet.size() + "record(s) found:\n");
+        querySet.forEach( o->{
+            sb.append(o.toString()+"\n");
+        });
+        sb.append("-----------------------------\n");
+        lists.add(sb.toString());
         return 0;
     }
 
-    public int query(int n) {
+    @Override
+    public int query(int n, List<Donation> donations, List<String> lists) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----").append("query top ").append(n).append("------\n");
+        for (int i = 0; i < n; i++){
+            sb.append(donations.get(i).toString()+"\n");
+        }
+        sb.append("-----------------------------\n");
+        lists.add(sb.toString());
         return 0;
     }
 
-    public int query() {
-        return 0;
+
+    public int queryAdaptor(String name,Set<Donator> recorde,List<Donation>  donations,List<String> lists){
+        String[] params = name.split("\\s");
+        if (params.length <2){
+            return 0;
+        }
+        switch (params[0]){
+            case "name":
+                query(name.substring(4).trim(),recorde,lists);
+                break;
+            case "top":
+                query(Integer.parseInt(params[1]),donations,lists);
+                break;
+            case "recipients":
+
+                break;
+            default:break;
+        }
+        return 1;
     }
 
     public void process(String line,Set<Donator> recorde,List<String> lists){
@@ -116,16 +152,19 @@ public class InstrunctionProcessor implements Instruction {
             update(line.substring(6).trim(),recorde,lists);
         }
         if (line.startsWith("delete")){
-            delete(line.substring(6),recorde,lists);
-        }
-        if (line.startsWith("query")){
-
+            delete(line.substring(6).trim(),recorde,lists);
         }
         if (line.startsWith("donate")){
-            donate(line.substring(6),recorde,lists);
+            donate(line.substring(6).trim(),recorde,lists);
         }
     }
 
+    @Override
+    public void process(String line, Set<Donator> recorde, List<Donation> donations, List<String> lists) {
+        if (line.startsWith("query")){
+            queryAdaptor(line.substring(5).trim(),recorde,donations,lists);
+        }
+    }
 
 
 }

@@ -10,7 +10,7 @@ class Donator {
     private String address;
     private String postcode;
     private String phone;
-    private List<Recipient> recipients;
+    private List<Recipient> recipients = new ArrayList<>();
 
     public List<Recipient> getRecipients() {
         return recipients;
