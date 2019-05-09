@@ -1,0 +1,14 @@
+name      Josephine Esmerelda Bloggs
+birthday   13-05-1980
+phone        99887766
+recipient  the disabled,animal protection org
+donation    100, 200
+address    102 Smith St,Summer hill, NSW
+postcode     2130
+
+name Pac Man
+birthday   27-03-1992
+address   27 New Street,Elwood,
+          VIC
+Postcode   3184
+phone      00333976

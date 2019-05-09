@@ -1,0 +1,4 @@
+update name Jo Bloggs; birthday 08-07-1998; phone 88884444; postcode 2008; address 9001 Chester Crescent, Chatswood, NSW;
+update name Jo Bloggs; birthday 08-07-1998; phone 88883333;
+update name Tim;birthday 13-03-1993; phone 431045575;
+delete Jo Bloggs;08-07-1998
