@@ -17,25 +17,23 @@ public class InstrunctionProcessor implements Instruction {
             lists.add(sb.toString());
             return 0;
         }
-        if (recorde.contains(donatorFromInstruction)){
-            recorde.forEach( obj->{
-                if (obj.getBirthday().equals(donatorFromInstruction.getBirthday()) && obj.getName().equals(donatorFromInstruction.getName())){
-                    if (donatorFromInstruction.getPostcode() != null){
-                        obj.setPostcode(donatorFromInstruction.getPostcode());
-                    }
-                    if (donatorFromInstruction.getAddress() != null){
-                        obj.setAddress(donatorFromInstruction.getAddress());
-                    }
-                    if (donatorFromInstruction.getPhone() != null){
-                        obj.setPhone(donatorFromInstruction.getPhone());
-                    }
-                    sb.append("Record updated!\n");
+        recorde.forEach( obj->{
+            if (obj.getBirthday().equals(donatorFromInstruction.getBirthday()) && obj.getName().equals(donatorFromInstruction.getName())){
+                if (donatorFromInstruction.getPostcode() != null){
+                    obj.setPostcode(donatorFromInstruction.getPostcode());
                 }
-            });
-        }else{
-            recorde.add(donatorFromInstruction);
-            sb.append("Record added!\n");
-        }
+                if (donatorFromInstruction.getAddress() != null){
+                    obj.setAddress(donatorFromInstruction.getAddress());
+                }
+                if (donatorFromInstruction.getPhone() != null){
+                    obj.setPhone(donatorFromInstruction.getPhone());
+                }
+                sb.append("Record updated!\n");
+            }else{
+                recorde.add(donatorFromInstruction);
+                sb.append("Record added!\n");
+            }
+        });
         sb.append("-----------------------------\n");
         lists.add(sb.toString());
         return 0;
@@ -44,25 +42,27 @@ public class InstrunctionProcessor implements Instruction {
     public int donate(String recipient,Set<Donator> recorde,List<String> lists) {
         StringBuilder sb = new StringBuilder();
         String [] recipients = recipient.split(";");
-        if (recipients.length != 4 ){
+        if (recipients.length < 3 ){
             return 0;
         }
-        sb.append("-----").append("donate").append(recipients[0]).append("------\n");
+        sb.append("-----").append("donate ").append(recipients[0]).append("------\n");
         Donator donator = new Donator();
         donator.setName(recipients[0].trim());
         donator.setBirthday(recipients[1].trim());
+        boolean isSuccess = false;
         if (donator.isDelValidToAdd()){
-            if (recorde.contains(donator)){
-                recorde.forEach( obj->{
-                    if (obj.getBirthday().equals(donator.getBirthday()) && obj.getName().equals(donator.getName())){
-                        for ( int i = 2 ; i < recipients.length; i++){
-                            String[] donates = recipients[i].split(",");
-                            Recipient newRec = new Recipient(donates[0],donates[1]);
-                            obj.getRecipients().add(newRec);
-                        }
+            for (Donator obj : recorde) {
+                if (obj.getBirthday().equals(donator.getBirthday()) && obj.getName().equals(donator.getName())){
+                    for ( int i = 2 ; i < recipients.length; i++){
+                        String[] donates = recipients[i].split(",");
+                        Recipient newRec = new Recipient(donates[0],donates[1],obj.getPostcode());
+                        obj.getRecipients().add(newRec);
+                        isSuccess  = true;
                     }
-                });
-                sb.append((recipients.length -2)+" new donation record(s) for"+recipients[0].trim()+"  "+recipients[1].trim()+"\n");
+                }
+            }
+            if (isSuccess){
+                sb.append((recipients.length -2)+" new donation record(s) for "+recipients[0].trim()+" birthday "+recipients[1].trim()+"\n");
             }else{
                 sb.append("Invalid instruction!\n");
             }
@@ -78,7 +78,7 @@ public class InstrunctionProcessor implements Instruction {
         if (lines.length != 2 ){
             return 0;
         }
-        sb.append("-----").append("delete").append(lines[0]).append("------\n");
+        sb.append("-----").append("delete ").append(lines[0]).append("------\n");
         Donator donator = new Donator();
         donator.setName(lines[0].trim());
         donator.setBirthday(lines[1].trim());
@@ -102,9 +102,9 @@ public class InstrunctionProcessor implements Instruction {
         StringBuilder sb = new StringBuilder();
         sb.append("-----").append("query name ").append(name).append("------\n");
         Set<Donator> querySet = recorade.stream().filter(o -> name.equals(o.getName())).collect(Collectors.toSet());
-        sb.append( querySet.size() + "record(s) found:\n");
+        sb.append( querySet.size() + " record(s) found:\n");
         querySet.forEach( o->{
-            sb.append(o.toString()+"\n");
+            sb.append(o.toString());
         });
         sb.append("-----------------------------\n");
         lists.add(sb.toString());
@@ -124,7 +124,7 @@ public class InstrunctionProcessor implements Instruction {
     }
 
 
-    public int queryAdaptor(String name,Set<Donator> recorde,List<Donation>  donations,List<String> lists){
+    public int queryAdaptor(String name,Set<Donator> recorde,List<String> lists){
         String[] params = name.split("\\s");
         if (params.length <2){
             return 0;
@@ -134,6 +134,9 @@ public class InstrunctionProcessor implements Instruction {
                 query(name.substring(4).trim(),recorde,lists);
                 break;
             case "top":
+                DonatorRecord dr = new DonatorRecord();
+                List<Donation>  donations = dr.readFromInputFile(recorde);
+                donations.sort(Comparator.comparingDouble(Donation::getAmount).reversed().thenComparing(Donation::getName));
                 query(Integer.parseInt(params[1]),donations,lists);
                 break;
             case "recipients":
@@ -157,14 +160,8 @@ public class InstrunctionProcessor implements Instruction {
         if (line.startsWith("donate")){
             donate(line.substring(6).trim(),recorde,lists);
         }
-    }
-
-    @Override
-    public void process(String line, Set<Donator> recorde, List<Donation> donations, List<String> lists) {
         if (line.startsWith("query")){
-            queryAdaptor(line.substring(5).trim(),recorde,donations,lists);
+            queryAdaptor(line.substring(5).trim(),recorde,lists);
         }
     }
-
-
 }

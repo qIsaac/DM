@@ -8,7 +8,5 @@ public interface Instruction{
         int delete(String donator,Set<Donator> recorade,List<String> lists);
         int query(String name,Set<Donator> recorade,List<String> lists);
         int query(int n,List<Donation>  donations,List<String> lists);
-        int queryAdaptor(String name,Set<Donator> recorde,List<Donation>  donations,List<String> lists);
         void process(String line,Set<Donator> recorade,List<String> lists);
-        void process(String line,Set<Donator> recorade,List<Donation>  donations,List<String> lists);
         }

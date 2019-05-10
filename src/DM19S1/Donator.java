@@ -95,17 +95,19 @@ class Donator {
     }
 
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Donator donator = (Donator) o;
         return Objects.equals(name, donator.name) &&
-                Objects.equals(birthday, donator.birthday);
+                Objects.equals(birthday, donator.birthday) &&
+                Objects.equals(recipients, donator.recipients);
     }
 
-
+    @Override
     public int hashCode() {
-        return Objects.hash(name, birthday);
+        return Objects.hash(name, birthday, recipients);
     }
 
     public boolean isValidToAdd(){
@@ -154,6 +156,12 @@ class Donator {
             String [] strings = address.split(",");
             if (set.contains(strings[strings.length-1].trim().toUpperCase())) {
                 isValid = true;
+            }else{
+                for (String a: set) {
+                    if (address.contains(a)){
+                        isValid = true;
+                    }
+                }
             }
         }else {
             isValid = true;
@@ -203,7 +211,6 @@ class Donator {
         if (!getRecipient().equals("")){
             builder.append("recipient  ").append(getRecipient()).append("\n");
         }
-        builder.append("\r\n");
         return builder.toString();
     }
 

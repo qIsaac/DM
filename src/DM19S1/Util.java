@@ -55,7 +55,7 @@ class Util{
                     donator.setPhone(record.get("phone"));
                     break;
                 case "recipient" :
-                    donator.setRecipients(getRecipients(record.get("recipient"),record.get("donation")));
+                    donator.setRecipients(getRecipients(record.get("recipient"),record.get("donation"),record.get("postcode")));
                     break;
                 case "address" :
                     donator.setAddress(record.get("address"));
@@ -70,7 +70,7 @@ class Util{
         return  donator;
     }
 
-    public static List<Recipient> getRecipients(String name,String money){
+    public static List<Recipient> getRecipients(String name,String money,String postCode){
         String [] names = name.split(",");
         String [] moneys = money.split(",");
         List<Recipient> recipients = new ArrayList<>();
@@ -78,7 +78,7 @@ class Util{
             return  recipients;
         }
         for (int i = 0; i< names.length; i++){
-               Recipient recipient = new Recipient(names[i],moneys[i]);
+               Recipient recipient = new Recipient(names[i],moneys[i],postCode);
                recipients.add(recipient);
         }
        return recipients;
