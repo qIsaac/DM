@@ -78,7 +78,7 @@ class Util{
             return  recipients;
         }
         for (int i = 0; i< names.length; i++){
-               Recipient recipient = new Recipient(names[i],moneys[i],postCode);
+               Recipient recipient = new Recipient(names[i].trim(),Long.parseLong(moneys[i].trim()),postCode);
                recipients.add(recipient);
         }
        return recipients;
@@ -100,7 +100,7 @@ class Util{
             }
             String name = line.split("\\s")[0];
             String value = Util.getValueByName(line, name);
-            don.put(name,value);
+            don.put(name,value.trim());
         }
         return record;
     }

@@ -5,7 +5,7 @@ import java.util.Objects;
 class Recipient {
     private int R_id;
     private String name;
-    private String donation;
+    private Long donation;
     private String postcode;
 
     public String getPostcode() {
@@ -23,15 +23,15 @@ class Recipient {
         this.name = name;
     }
 
-    public String getDonation() {
+    public Long getDonation() {
         return donation;
     }
 
-    public void setDonation(String donation) {
+    public void setDonation(Long donation) {
         this.donation = donation;
     }
 
-    public Recipient(String name, String donation,String postcode) {
+    public Recipient(String name, Long donation,String postcode) {
         this.name = name;
         this.donation = donation;
         this.postcode = postcode;

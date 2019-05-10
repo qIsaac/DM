@@ -37,9 +37,9 @@ public class DonatorRecord {
         Donation donation = new Donation();
         donation.setName(donator.getName());
         donation.setBirthday(donator.getBirthday());
-        Double total = 0d;
+        Long total = 0L;
         for (Recipient r:donator.getRecipients()) {
-            total += Double.parseDouble(r.getDonation());
+            total += r.getDonation();
         }
         donation.setAmount(total);
         return donation;
