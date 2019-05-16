@@ -17,23 +17,32 @@ public class InstrunctionProcessor implements Instruction {
             lists.add(sb.toString());
             return 0;
         }
-        recorde.forEach( obj->{
-            if (obj.getBirthday().equals(donatorFromInstruction.getBirthday()) && obj.getName().equals(donatorFromInstruction.getName())){
-                if (donatorFromInstruction.getPostcode() != null){
-                    obj.setPostcode(donatorFromInstruction.getPostcode());
-                }
-                if (donatorFromInstruction.getAddress() != null){
-                    obj.setAddress(donatorFromInstruction.getAddress());
-                }
-                if (donatorFromInstruction.getPhone() != null){
-                    obj.setPhone(donatorFromInstruction.getPhone());
-                }
-                sb.append("Record updated!\n");
-            }else{
-                recorde.add(donatorFromInstruction);
-                sb.append("Record added!\n");
-            }
-        });
+        if (recorde.size() == 0){
+            recorde.add(donatorFromInstruction);
+            sb.append("Record added!\n");
+;        }else{
+            boolean isUpdate = false;
+           for (Donator obj : recorde){
+                   if (obj.getBirthday().equals(donatorFromInstruction.getBirthday()) && obj.getName().equals(donatorFromInstruction.getName())){
+                       if (donatorFromInstruction.getPostcode() != null){
+                           obj.setPostcode(donatorFromInstruction.getPostcode());
+                       }
+                       if (donatorFromInstruction.getAddress() != null){
+                           obj.setAddress(donatorFromInstruction.getAddress());
+                       }
+                       if (donatorFromInstruction.getPhone() != null){
+                           obj.setPhone(donatorFromInstruction.getPhone());
+                       }
+                       sb.append("Record updated!\n");
+                       isUpdate = true;
+                       break;
+                   }
+           }
+           if (isUpdate){
+               recorde.add(donatorFromInstruction);
+               sb.append("Record added!\n");
+           }
+        }
         sb.append("-----------------------------\n");
         lists.add(sb.toString());
         return 0;
