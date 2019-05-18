@@ -37,7 +37,7 @@ public class InstrunctionProcessor implements Instruction {
                        break;
                    }
            }
-           if (isUpdate){
+           if (!isUpdate){
                recorde.add(donatorFromInstruction);
                sb.append("Record added!\n");
            }
