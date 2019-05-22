@@ -26,11 +26,11 @@ public class DM {
             });
             StringBuilder builder = new StringBuilder();
             for (Donator rec : record) {
-                builder.append(rec.toString()+ "\n");
+                builder.append(rec.toString()+ "\r\n");
             }
             StringBuilder builder1 = new StringBuilder();
             for (String rep : reportList) {
-                builder1.append(rep.toString() +"\n");
+                builder1.append(rep.toString() +"\r\n");
             }
             FileUtils.write(new File(resultfile),builder.toString(),false);
             FileUtils.write(new File(reportfile),builder1.toString(),false);

@@ -9,16 +9,16 @@ public class InstrunctionProcessor implements Instruction {
     public int update(String donator, Set<Donator> recorde,List<String> lists) {
         Donator donatorFromInstruction = Util.getDonatorFromInstruction(donator);
         StringBuilder sb = new StringBuilder();
-        sb.append("-----").append("update ").append(donator.split("[;]")[0]).append("------\n");
+        sb.append("-----").append("update ").append(donator.split("[;]")[0]).append("------\r\n");
         if (donatorFromInstruction == null){
-            sb.append("Invalid instruction!\n");
-            sb.append("-----------------------------\n");
+            sb.append("Invalid instruction!\r\n");
+            sb.append("-----------------------------\r\n");
             lists.add(sb.toString());
             return 0;
         }
         if (recorde.size() == 0){
             recorde.add(donatorFromInstruction);
-            sb.append("Record added!\n");
+            sb.append("Record added!\r\n");
 ;        }else{
             boolean isUpdate = false;
            for (Donator obj : recorde){
@@ -32,17 +32,17 @@ public class InstrunctionProcessor implements Instruction {
                        if (donatorFromInstruction.getPhone() != null){
                            obj.setPhone(donatorFromInstruction.getPhone());
                        }
-                       sb.append("Record updated!\n");
+                       sb.append("Record updated!\r\n");
                        isUpdate = true;
                        break;
                    }
            }
            if (!isUpdate){
                recorde.add(donatorFromInstruction);
-               sb.append("Record added!\n");
+               sb.append("Record added!\r\n");
            }
         }
-        sb.append("-----------------------------\n");
+        sb.append("-----------------------------\r\n");
         lists.add(sb.toString());
         return 0;
     }
@@ -53,7 +53,7 @@ public class InstrunctionProcessor implements Instruction {
         if (recipients.length < 3 ){
             return 0;
         }
-        sb.append("-----").append("donate ").append(recipients[0]).append("------\n");
+        sb.append("-----").append("donate ").append(recipients[0]).append("------\r\n");
         Donator donator = new Donator();
         donator.setName(recipients[0].trim());
         donator.setBirthday(recipients[1].trim());
@@ -70,12 +70,12 @@ public class InstrunctionProcessor implements Instruction {
                 }
             }
             if (isSuccess){
-                sb.append((recipients.length -2)+" new donation record(s) for "+recipients[0].trim()+" birthday "+recipients[1].trim()+"\n");
+                sb.append((recipients.length -2)+" new donation record(s) for "+recipients[0].trim()+" birthday "+recipients[1].trim()+"\r\n");
             }else{
-                sb.append("Invalid instruction!\n");
+                sb.append("Invalid instruction!\r\n");
             }
         }
-        sb.append("-----------------------------\n");
+        sb.append("-----------------------------\r\n");
         lists.add(sb.toString());
         return 1;
     }
@@ -86,21 +86,21 @@ public class InstrunctionProcessor implements Instruction {
         if (lines.length != 2 ){
             return 0;
         }
-        sb.append("-----").append("delete ").append(lines[0]).append("------\n");
+        sb.append("-----").append("delete ").append(lines[0]).append("------\r\n");
         Donator donator = new Donator();
         donator.setName(lines[0].trim());
         donator.setBirthday(lines[1].trim());
         if (donator.isDelValidToAdd()){
             boolean remove = recorde.remove(donator);
             if (remove){
-                sb.append("Record deleted!\n");
+                sb.append("Record deleted!\r\n");
             }else{
-                sb.append("Record not found!\n");
+                sb.append("Record not found!\r\n");
             }
         }else{
-            sb.append("Invalid instruction!\n");
+            sb.append("Invalid instruction!\r\n");
         }
-        sb.append("-----------------------------\n");
+        sb.append("-----------------------------\r\n");
         lists.add(sb.toString());
         return 1;
     }
@@ -108,13 +108,13 @@ public class InstrunctionProcessor implements Instruction {
     @Override
     public int query(String name, Set<Donator> recorade, List<String> lists) {
         StringBuilder sb = new StringBuilder();
-        sb.append("-----").append("query name ").append(name).append("------\n");
+        sb.append("-----").append("query name ").append(name).append("------\r\n");
         Set<Donator> querySet = recorade.stream().filter(o -> name.equals(o.getName())).collect(Collectors.toSet());
         sb.append( querySet.size() + " record(s) found:\n");
         querySet.forEach( o->{
             sb.append(o.toString());
         });
-        sb.append("-----------------------------\n");
+        sb.append("-----------------------------\r\n");
         lists.add(sb.toString());
         return 0;
     }
@@ -122,11 +122,11 @@ public class InstrunctionProcessor implements Instruction {
     @Override
     public int query(int n, List<Donation> donations, List<String> lists) {
         StringBuilder sb = new StringBuilder();
-        sb.append("-----").append("query top ").append(n).append("------\n");
+        sb.append("-----").append("query top ").append(n).append("------\r\n");
         for (int i = 0; i < n; i++){
-            sb.append(donations.get(i).toString()+"\n");
+            sb.append(donations.get(i).toString()+"\r\n");
         }
-        sb.append("-----------------------------\n");
+        sb.append("-----------------------------\r\n");
         lists.add(sb.toString());
         return 0;
     }
@@ -151,16 +151,16 @@ public class InstrunctionProcessor implements Instruction {
             resultRecipients.add(recipient);
         });
         StringBuilder sb = new StringBuilder();
-        sb.append("-----").append("query recipients ").append("------\n");
+        sb.append("-----").append("query recipients ").append("------\r\n");
         ArrayList<String> sortNames = new ArrayList<>(names);
         Collections.sort(sortNames);
         for (String name : sortNames ) {
             Optional<Recipient> max = resultRecipients.stream().filter(o -> name.equals(o.getName())).collect(Collectors.toList()).stream().max(Comparator.comparingLong(Recipient::getDonation));
             Long maxDonation = max.get().getDonation();
             List<String> collect = resultRecipients.stream().filter(o -> o.getDonation().equals(maxDonation)).map(o -> o.getPostcode()).collect(Collectors.toList());
-            sb.append(name).append(": ").append(maxDonation).append("; postcode ").append(list2String(collect,", ")).append("\n");
+            sb.append(name).append(": ").append(maxDonation).append("; postcode ").append(list2String(collect,", ")).append("\r\n");
         }
-        sb.append("-----------------------------\n");
+        sb.append("-----------------------------\r\n");
         lists.add(sb.toString());
         return 0;
     }

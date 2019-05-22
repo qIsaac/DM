@@ -194,22 +194,22 @@ class Donator {
 
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("name  ").append(name).append("\n")
-                .append("birthday  ").append(birthday).append("\n");
+        builder.append("name  ").append(name).append("\r\n")
+                .append("birthday  ").append(birthday).append("\r\n");
         if (address != null && !"".equals(address)){
-            builder.append("address  ").append(address).append("\n");
+            builder.append("address  ").append(address).append("\r\n");
         }
         if (postcode!= null && !"".equals(postcode)){
-            builder.append("postcode  ").append(postcode).append("\n");
+            builder.append("postcode  ").append(postcode).append("\r\n");
         }
         if (phone != null && !"".equals(phone)){
-            builder.append("phone  ").append(phone).append("\n");
+            builder.append("phone  ").append(phone).append("\r\n");
         }
         if (!getDonation().equals("") ){
-            builder.append("donation  ").append(getDonation()).append("\n");
+            builder.append("donation  ").append(getDonation()).append("\r\n");
         }
         if (!getRecipient().equals("")){
-            builder.append("recipient  ").append(getRecipient()).append("\n");
+            builder.append("recipient  ").append(getRecipient()).append("\r\n");
         }
         return builder.toString();
     }
